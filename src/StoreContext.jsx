@@ -10,7 +10,7 @@ const KEYS = {
 }
 
 export const DEFAULT_SETTINGS = {
-  storeName: 'Abena Store',
+  storeName: 'Abena Place',
   tagline: 'Quality general goods at your doorstep',
   whatsapp: '233000000000',
   promoCode: 'ABENA10',
