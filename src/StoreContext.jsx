@@ -7,7 +7,10 @@ const KEYS = {
   cart: 'abena_cart',
   orders: 'abena_orders',
   settings: 'abena_settings',
+  schema: 'abena_schema_version',
 }
+
+const SCHEMA_VERSION = 'v2-real-products'
 
 export const DEFAULT_SETTINGS = {
   storeName: 'Abena Place',
@@ -19,19 +22,23 @@ export const DEFAULT_SETTINGS = {
   currency: 'GH₵',
 }
 
+const img = (id) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=400&q=80`
+
 export const DEFAULT_PRODUCTS = [
-  { id: 'p1', name: 'Classic Handbag', category: 'Fashion', price: 150, discount: 0, emoji: '👜', color: '#f43f5e', inStock: true },
-  { id: 'p2', name: 'Sneakers (Unisex)', category: 'Fashion', price: 220, discount: 10, emoji: '👟', color: '#0ea5e9', inStock: true },
-  { id: 'p3', name: 'Maxi Dress', category: 'Fashion', price: 180, discount: 0, emoji: '👗', color: '#a855f7', inStock: true },
-  { id: 'p4', name: 'Aviator Sunglasses', category: 'Fashion', price: 60, discount: 5, emoji: '🕶️', color: '#f59e0b', inStock: true },
-  { id: 'p5', name: 'Skincare Set', category: 'Beauty', price: 130, discount: 15, emoji: '🧴', color: '#ec4899', inStock: true },
-  { id: 'p6', name: 'Perfume 50ml', category: 'Beauty', price: 200, discount: 0, emoji: '🌸', color: '#8b5cf6', inStock: true },
-  { id: 'p7', name: 'Wireless Earbuds', category: 'Electronics', price: 120, discount: 10, emoji: '🎧', color: '#22c55e', inStock: true },
-  { id: 'p8', name: 'Phone Charger (Fast)', category: 'Electronics', price: 45, discount: 0, emoji: '🔌', color: '#06b6d4', inStock: true },
-  { id: 'p9', name: 'Blender 1.5L', category: 'Home', price: 350, discount: 5, emoji: '🥤', color: '#6366f1', inStock: true },
-  { id: 'p10', name: 'Kitchen Knife Set', category: 'Home', price: 90, discount: 0, emoji: '🔪', color: '#ef4444', inStock: true },
-  { id: 'p11', name: 'Organic Honey 500g', category: 'Food', price: 55, discount: 0, emoji: '🍯', color: '#f97316', inStock: true },
-  { id: 'p12', name: 'Nutella Spread 350g', category: 'Food', price: 40, discount: 0, emoji: '🍫', color: '#78716c', inStock: true },
+  { id: 'p1', name: 'Nike-Style Running Sneaker', category: 'Fashion', price: 350, discount: 10, image: img('1542291026-7eec264c27ff'), emoji: '👟', color: '#ef4444', inStock: true },
+  { id: 'p2', name: 'Classic White Sneakers (Pair)', category: 'Fashion', price: 220, discount: 0, image: img('1549298916-b41d501d3772'), emoji: '👟', color: '#0ea5e9', inStock: true },
+  { id: 'p3', name: 'Men\'s Leather Wristwatch', category: 'Fashion', price: 380, discount: 5, image: img('1523275335684-37898b6baf30'), emoji: '⌚', color: '#a855f7', inStock: true },
+  { id: 'p4', name: 'Aviator Sunglasses', category: 'Fashion', price: 90, discount: 0, image: img('1572635196237-14b3f281503f'), emoji: '🕶️', color: '#f59e0b', inStock: true },
+  { id: 'p5', name: '100% Cotton T-Shirt (Pack of 2)', category: 'Fashion', price: 130, discount: 0, image: img('1521572163474-6864f9cf17ab'), emoji: '👕', color: '#64748b', inStock: true },
+  { id: 'p6', name: 'Ladies\' Classic Handbag', category: 'Fashion', price: 250, discount: 15, image: img('1584917865442-de89df76afd3'), emoji: '👜', color: '#f43f5e', inStock: true },
+  { id: 'p7', name: 'Instant Camera', category: 'Electronics', price: 850, discount: 10, image: img('1526170375885-4d8ecf77b99f'), emoji: '📷', color: '#22c55e', inStock: true },
+  { id: 'p8', name: 'Wireless Headphones', category: 'Electronics', price: 320, discount: 0, image: img('1505740420928-5e560c06d30e'), emoji: '🎧', color: '#06b6d4', inStock: true },
+  { id: 'p9', name: 'Smartphone (Unlocked)', category: 'Electronics', price: 1200, discount: 0, image: img('1511707171634-5f897ff02aa9'), emoji: '📱', color: '#6366f1', inStock: true },
+  { id: 'p10', name: 'Designer Perfume 100ml', category: 'Beauty', price: 260, discount: 0, image: img('1541643600914-78b084683601'), emoji: '🌸', color: '#8b5cf6', inStock: true },
+  { id: 'p11', name: 'Skincare Cream Set', category: 'Beauty', price: 150, discount: 20, image: img('1526947425960-945c6e72858f'), emoji: '🧴', color: '#ec4899', inStock: true },
+  { id: 'p12', name: 'Kitchen Utensils Set', category: 'Home', price: 480, discount: 5, image: img('1556911220-bff31c812dba'), emoji: '🍳', color: '#ef4444', inStock: true },
+  { id: 'p13', name: 'Roasted Coffee Beans 250g', category: 'Food', price: 95, discount: 0, image: img('1447933601403-0c6688de566e'), emoji: '☕', color: '#92400e', inStock: true },
+  { id: 'p14', name: 'Gold-Plated Necklace', category: 'Fashion', price: 310, discount: 0, image: img('1599643478518-a784e5dc4c8f'), emoji: '📿', color: '#d97706', inStock: true },
 ]
 
 export const CATEGORIES = ['All', 'Fashion', 'Beauty', 'Electronics', 'Home', 'Food']
@@ -58,12 +65,20 @@ function save(key, value) {
 }
 
 export function StoreProvider({ children }) {
-  const [products, setProducts] = useState(() => load(KEYS.products, DEFAULT_PRODUCTS))
+  const [products, setProducts] = useState(() => {
+    if (localStorage.getItem(KEYS.schema) !== SCHEMA_VERSION) {
+      return DEFAULT_PRODUCTS
+    }
+    return load(KEYS.products, DEFAULT_PRODUCTS)
+  })
   const [cart, setCart] = useState(() => load(KEYS.cart, []))
   const [orders, setOrders] = useState(() => load(KEYS.orders, []))
   const [settings, setSettings] = useState(() => ({ ...DEFAULT_SETTINGS, ...load(KEYS.settings, {}) }))
 
   useEffect(() => save(KEYS.products, products), [products])
+  useEffect(() => {
+    localStorage.setItem(KEYS.schema, SCHEMA_VERSION)
+  }, [])
   useEffect(() => save(KEYS.cart, cart), [cart])
   useEffect(() => save(KEYS.orders, orders), [orders])
   useEffect(() => save(KEYS.settings, settings), [settings])

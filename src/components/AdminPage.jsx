@@ -13,7 +13,17 @@ const EMPTY_FORM = {
   discount: 0,
   emoji: '📦',
   color: PRESET_COLORS[0],
+  image: '',
   inStock: true,
+}
+
+function readFileAsDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
 }
 
 export default function AdminPage() {
@@ -29,6 +39,17 @@ export default function AdminPage() {
 
   function resetForm() {
     setForm(EMPTY_FORM)
+  }
+
+  async function handleImageUpload(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    try {
+      const dataUrl = await readFileAsDataURL(file)
+      setForm((f) => ({ ...f, image: dataUrl }))
+    } catch {
+      alert('Could not read that file. Please try another image.')
+    }
   }
 
   function saveProduct(e) {
@@ -79,6 +100,34 @@ export default function AdminPage() {
             <div>
               <label className={label}>Name</label>
               <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={input} />
+            </div>
+
+            <div>
+              <label className={label}>Product photo</label>
+              <input
+                value={form.image}
+                onChange={(e) => setForm({ ...form, image: e.target.value })}
+                placeholder="Paste an image URL, or upload a photo below"
+                className={input}
+              />
+              <div className="mt-2 flex items-center gap-3">
+                <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium hover:bg-slate-50">
+                  📷 Upload photo
+                  <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                </label>
+                {form.image ? (
+                  <img src={form.image} alt="preview" className="w-14 h-14 rounded-lg object-cover border border-slate-200" />
+                ) : (
+                  <span className="w-14 h-14 rounded-lg grid place-items-center text-2xl border border-dashed border-slate-300 text-slate-400">
+                    {form.emoji}
+                  </span>
+                )}
+              </div>
+              {form.image && (
+                <button type="button" onClick={() => setForm({ ...form, image: '' })} className="text-xs text-slate-500 hover:text-brand mt-1">
+                  Remove photo (fall back to emoji)
+                </button>
+              )}
             </div>
 
             <div className="grid grid-cols-2 gap-3">
@@ -144,8 +193,8 @@ export default function AdminPage() {
           <div className="space-y-3">
             {products.map((p) => (
               <div key={p.id} className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
-                <div className="w-14 h-14 rounded-xl grid place-items-center text-3xl shrink-0" style={{ background: `${p.color}33` }}>
-                  {p.emoji}
+                <div className="w-14 h-14 rounded-xl shrink-0 overflow-hidden grid place-items-center text-3xl" style={{ background: `${p.color}33` }}>
+                  {p.image ? <img src={p.image} alt={p.name} className="w-full h-full object-cover" /> : p.emoji}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm truncate">

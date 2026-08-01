@@ -1,19 +1,31 @@
+import { useState } from 'react'
 import { useStore, money } from '../StoreContext'
 
 export default function ProductCard({ product, onAdd }) {
   const { settings, priceOf } = useStore()
+  const [imgError, setImgError] = useState(false)
   const price = priceOf(product)
   const hasDiscount = (product.discount || 0) > 0
 
   return (
     <div className="group flex flex-col rounded-lg border border-slate-200 bg-white overflow-hidden hover:shadow-md hover:border-brand transition">
-      <div className="relative aspect-square bg-slate-100 grid place-items-center">
+      <div className="relative aspect-square bg-slate-100 grid place-items-center overflow-hidden">
         {hasDiscount && (
-          <span className="absolute top-2 left-2 rounded bg-brand text-white text-xs font-bold px-2 py-1">
+          <span className="absolute top-2 left-2 z-10 rounded bg-brand text-white text-xs font-bold px-2 py-1">
             -{product.discount}%
           </span>
         )}
-        <span className="text-6xl drop-shadow transition group-hover:scale-110">{product.emoji}</span>
+        {product.image && !imgError ? (
+          <img
+            src={product.image}
+            alt={product.name}
+            loading="lazy"
+            className="w-full h-full object-cover transition duration-300 group-hover:scale-105"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <span className="text-6xl drop-shadow transition group-hover:scale-110">{product.emoji}</span>
+        )}
         {!product.inStock && (
           <div className="absolute inset-0 grid place-items-center bg-white/70 backdrop-blur-sm">
             <span className="rounded-full bg-slate-900 text-white text-xs font-bold px-3 py-1.5 uppercase tracking-wide">

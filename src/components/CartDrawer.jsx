@@ -30,10 +30,14 @@ export default function CartDrawer({ open, onClose, onCheckout }) {
             lines.map(({ item, product }) => (
               <div key={item.productId} className="flex gap-3 items-center">
                 <div
-                  className="w-16 h-16 rounded-xl grid place-items-center text-3xl shrink-0"
+                  className="w-16 h-16 rounded-xl shrink-0 overflow-hidden grid place-items-center text-3xl"
                   style={{ background: `${product.color}33` }}
                 >
-                  {product.emoji}
+                  {product.image ? (
+                    <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                  ) : (
+                    product.emoji
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm truncate">{product.name}</p>
