@@ -1,13 +1,39 @@
-import { useState } from 'react'
-import { useStore } from '../StoreContext'
+import { useEffect, useState } from 'react'
+import { useStore, CATEGORIES } from '../StoreContext'
 import ProductCard from './ProductCard'
 
-const CATEGORIES = ['All', 'Fashion', 'Beauty', 'Electronics', 'Home', 'Food']
+const SLIDES = [
+  {
+    emoji: '🛍️',
+    title: 'Big Sale — Up to 50% OFF',
+    sub: 'Huge discounts on selected items across all categories.',
+    from: 'from-orange-500',
+    to: 'to-brand',
+  },
+  {
+    emoji: '📦',
+    title: 'Pay On Delivery',
+    sub: 'Order now, pay when your items arrive at your door.',
+    from: 'from-rose-500',
+    to: 'to-pink-600',
+  },
+  {
+    emoji: '🎁',
+    title: 'New Arrivals Every Week',
+    sub: 'Fresh stock of bags, shoes, beauty and more.',
+    from: 'from-indigo-500',
+    to: 'to-purple-600',
+  },
+]
 
-export default function ShopPage({ onAdd, goCheckout }) {
-  const { products, cart, settings } = useStore()
-  const [category, setCategory] = useState('All')
-  const [query, setQuery] = useState('')
+export default function ShopPage({ onAdd, goCheckout, category, setCategory, query }) {
+  const { products, cart } = useStore()
+  const [slide, setSlide] = useState(0)
+
+  useEffect(() => {
+    const t = setInterval(() => setSlide((s) => (s + 1) % SLIDES.length), 5000)
+    return () => clearInterval(t)
+  }, [])
 
   const filtered = products.filter((p) => {
     const inCat = category === 'All' || p.category === category
@@ -15,72 +41,113 @@ export default function ShopPage({ onAdd, goCheckout }) {
     return inCat && matches
   })
 
+  const featured = CATEGORIES.filter((c) => c !== 'All')
+
   return (
-    <div>
-      <section className="bg-gradient-to-br from-rose-600 via-pink-600 to-amber-500 text-white">
-        <div className="max-w-6xl mx-auto px-4 py-14 flex flex-col items-center text-center gap-4">
-          <h1 className="text-3xl sm:text-4xl font-extrabold">{settings.tagline}</h1>
-          <p className="text-white/85 max-w-xl">
-            Shop quality products, pay on delivery, and track your order right from your phone.
-          </p>
-          <div className="mt-2 flex flex-wrap justify-center gap-3 text-sm">
-            <span className="rounded-full bg-white/15 px-3 py-1.5">✅ Pay on delivery</span>
-            <span className="rounded-full bg-white/15 px-3 py-1.5">🚚 Fast delivery</span>
-            <span className="rounded-full bg-white/15 px-3 py-1.5">🎁 Daily deals</span>
+    <div className="bg-slate-100 min-h-screen">
+      <section className="max-w-6xl mx-auto px-4 pt-4">
+        <div className="relative h-48 sm:h-60 overflow-hidden rounded-xl shadow">
+          {SLIDES.map((s, i) => (
+            <div
+              key={i}
+              className={`absolute inset-0 flex items-center justify-between px-8 sm:px-14 bg-gradient-to-r ${s.from} ${s.to} transition-opacity duration-700 ${
+                i === slide ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              }`}
+            >
+              <div className="text-white">
+                <h2 className="text-2xl sm:text-3xl font-extrabold drop-shadow-sm">{s.title}</h2>
+                <p className="text-white/90 text-sm mt-1.5 max-w-md">{s.sub}</p>
+                <button
+                  onClick={() => goCheckout()}
+                  className="mt-4 bg-white text-brand font-bold text-sm px-6 py-2.5 rounded hover:bg-brand-light transition"
+                >
+                  SHOP NOW
+                </button>
+              </div>
+              <div className="hidden sm:block text-8xl drop-shadow-lg">{s.emoji}</div>
+            </div>
+          ))}
+
+          <button
+            onClick={() => setSlide((slide - 1 + SLIDES.length) % SLIDES.length)}
+            className="absolute left-2 top-1/2 -translate-y-1/2 grid place-items-center w-8 h-8 rounded-full bg-white/80 text-slate-700 font-bold shadow hover:bg-white"
+          >
+            ‹
+          </button>
+          <button
+            onClick={() => setSlide((slide + 1) % SLIDES.length)}
+            className="absolute right-2 top-1/2 -translate-y-1/2 grid place-items-center w-8 h-8 rounded-full bg-white/80 text-slate-700 font-bold shadow hover:bg-white"
+          >
+            ›
+          </button>
+
+          <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2">
+            {SLIDES.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setSlide(i)}
+                className={`h-2 rounded-full transition-all ${i === slide ? 'w-6 bg-white' : 'w-2 bg-white/50'}`}
+              />
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 py-8">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 justify-between mb-6">
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search products…"
-            className="w-full sm:max-w-xs px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-rose-500 text-sm"
-          />
+      <section className="max-w-6xl mx-auto px-4 py-6">
+        <h2 className="font-bold text-slate-800 mb-3">Shop by Category</h2>
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+          {featured.map((c) => (
+            <button
+              key={c}
+              onClick={() => setCategory(c)}
+              className="group flex flex-col items-center gap-2 rounded-lg bg-white border border-slate-200 p-4 hover:border-brand hover:shadow-sm transition"
+            >
+              <span className="text-3xl group-hover:scale-110 transition">
+                {c === 'Fashion' ? '👗' : c === 'Beauty' ? '🧴' : c === 'Electronics' ? '🎧' : c === 'Home' ? '🏠' : '🍽️'}
+              </span>
+              <span className="text-xs font-semibold text-slate-600 group-hover:text-brand">{c}</span>
+            </button>
+          ))}
+        </div>
+      </section>
 
-          <div className="flex flex-wrap gap-2">
-            {CATEGORIES.map((c) => (
-              <button
-                key={c}
-                onClick={() => setCategory(c)}
-                className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition ${
-                  category === c
-                    ? 'bg-slate-900 text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
+      <section className="max-w-6xl mx-auto px-4 pb-8">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="font-bold text-slate-800">
+            {category === 'All' ? 'All Products' : category}
+            <span className="ml-2 text-xs font-normal text-slate-500">({filtered.length})</span>
+          </h2>
+          {category !== 'All' && (
+            <button onClick={() => setCategory('All')} className="text-sm text-brand font-semibold hover:underline">
+              View all
+            </button>
+          )}
         </div>
 
         {filtered.length === 0 ? (
-          <div className="py-20 text-center text-slate-500">
+          <div className="py-16 text-center text-slate-500 bg-white rounded-lg">
             <div className="text-5xl mb-3">🔍</div>
             <p className="font-medium">No products found. Try a different search or category.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
             {filtered.map((p) => (
               <ProductCard key={p.id} product={p} onAdd={onAdd} />
             ))}
           </div>
         )}
-
-        {cart.length > 0 && (
-          <div className="sticky bottom-4 mt-8 flex justify-center">
-            <button
-              onClick={goCheckout}
-              className="px-6 py-3 rounded-full bg-rose-600 text-white font-bold shadow-lg shadow-rose-600/30 hover:bg-rose-700 transition"
-            >
-              Checkout ({cart.length} item{cart.length > 1 ? 's' : ''}) →
-            </button>
-          </div>
-        )}
       </section>
+
+      {cart.length > 0 && (
+        <div className="sticky bottom-4 flex justify-center">
+          <button
+            onClick={goCheckout}
+            className="px-6 py-3 rounded-full bg-brand text-white font-bold shadow-lg shadow-brand/40 hover:bg-brand-dark transition"
+          >
+            Checkout ({cart.reduce((s, i) => s + i.qty, 0)} item{cart.reduce((s, i) => s + i.qty, 0) > 1 ? 's' : ''}) →
+          </button>
+        </div>
+      )}
     </div>
   )
 }

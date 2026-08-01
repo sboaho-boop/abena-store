@@ -71,7 +71,7 @@ export default function CheckoutPage({ onOrderPlaced, goShop }) {
         <p className="text-slate-500 mb-6">Add some products before checking out.</p>
         <button
           onClick={goShop}
-          className="px-6 py-3 rounded-full bg-rose-600 text-white font-semibold hover:bg-rose-700"
+          className="px-6 py-3 rounded-full bg-brand text-white font-semibold hover:bg-brand-dark"
         >
           Browse products
         </button>
@@ -80,7 +80,7 @@ export default function CheckoutPage({ onOrderPlaced, goShop }) {
   }
 
   const input =
-    'w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-rose-500 text-sm'
+    'w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand text-sm'
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">

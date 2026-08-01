@@ -13,6 +13,8 @@ function App() {
   const [page, setPage] = useState('shop')
   const [cartOpen, setCartOpen] = useState(false)
   const [placedOrderId, setPlacedOrderId] = useState(null)
+  const [category, setCategory] = useState('All')
+  const [query, setQuery] = useState('')
 
   function handleAdd(productId) {
     addToCart(productId)
@@ -30,11 +32,24 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
-      <Navbar page={page} setPage={setPage} onCartOpen={() => setCartOpen(true)} />
+      <Navbar
+        setPage={setPage}
+        onCartOpen={() => setCartOpen(true)}
+        query={query}
+        setQuery={setQuery}
+        category={category}
+        setCategory={setCategory}
+      />
 
       <main className="flex-1">
         {page === 'shop' && (
-          <ShopPage onAdd={handleAdd} goCheckout={goCheckout} />
+          <ShopPage
+            onAdd={handleAdd}
+            goCheckout={goCheckout}
+            category={category}
+            setCategory={setCategory}
+            query={query}
+          />
         )}
         {page === 'checkout' && (
           <CheckoutPage

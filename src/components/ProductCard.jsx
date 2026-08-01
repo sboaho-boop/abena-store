@@ -6,18 +6,14 @@ export default function ProductCard({ product, onAdd }) {
   const hasDiscount = (product.discount || 0) > 0
 
   return (
-    <div className="group relative flex flex-col rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition">
-      {hasDiscount && (
-        <span className="absolute top-3 left-3 z-10 rounded-full bg-rose-500 text-white text-xs font-bold px-2.5 py-1">
-          -{product.discount}%
-        </span>
-      )}
-
-      <div
-        className="relative aspect-square grid place-items-center text-7xl"
-        style={{ background: `linear-gradient(135deg, ${product.color}, ${product.color}55)` }}
-      >
-        <span className="drop-shadow-lg transition group-hover:scale-110">{product.emoji}</span>
+    <div className="group flex flex-col rounded-lg border border-slate-200 bg-white overflow-hidden hover:shadow-md hover:border-brand transition">
+      <div className="relative aspect-square bg-slate-100 grid place-items-center">
+        {hasDiscount && (
+          <span className="absolute top-2 left-2 rounded bg-brand text-white text-xs font-bold px-2 py-1">
+            -{product.discount}%
+          </span>
+        )}
+        <span className="text-6xl drop-shadow transition group-hover:scale-110">{product.emoji}</span>
         {!product.inStock && (
           <div className="absolute inset-0 grid place-items-center bg-white/70 backdrop-blur-sm">
             <span className="rounded-full bg-slate-900 text-white text-xs font-bold px-3 py-1.5 uppercase tracking-wide">
@@ -27,32 +23,21 @@ export default function ProductCard({ product, onAdd }) {
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-1 p-4">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-          {product.category}
-        </span>
-        <h3 className="font-semibold text-slate-900 leading-snug">{product.name}</h3>
-
-        <div className="mt-auto pt-2 flex items-center justify-between gap-2">
-          <div>
-            {hasDiscount && (
-              <div className="text-xs text-slate-400 line-through">
-                {money(product.price, settings.currency)}
-              </div>
-            )}
-            <div className="font-bold text-lg text-slate-900">
-              {money(price, settings.currency)}
-            </div>
+      <div className="p-3 flex-1 flex flex-col">
+        <h3 className="text-sm text-slate-700 line-clamp-2 leading-snug min-h-10">{product.name}</h3>
+        <div className="mt-auto pt-2">
+          <div className="text-lg font-bold text-slate-900">{money(price, settings.currency)}</div>
+          <div className="text-xs text-slate-400 line-through">
+            {hasDiscount ? money(product.price, settings.currency) : '\u00A0'}
           </div>
-
-          <button
-            onClick={() => onAdd(product.id)}
-            disabled={!product.inStock}
-            className="px-3 py-2 rounded-xl bg-slate-900 text-white text-sm font-semibold hover:bg-rose-600 transition disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            Add +
-          </button>
         </div>
+        <button
+          onClick={() => onAdd(product.id)}
+          disabled={!product.inStock}
+          className="mt-2 w-full py-2 rounded bg-brand-light text-brand font-bold text-sm transition hover:bg-brand hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          ADD TO CART
+        </button>
       </div>
     </div>
   )

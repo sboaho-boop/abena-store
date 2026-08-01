@@ -35,7 +35,7 @@ export default function TrackPage({ placedOrderId, onDismissPlaced }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="e.g. ABN-123456"
-          className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-rose-500 text-sm"
+          className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand text-sm"
         />
         <button className="px-6 rounded-xl bg-slate-900 text-white text-sm font-semibold hover:bg-slate-700">
           Track

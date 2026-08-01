@@ -34,6 +34,8 @@ export const DEFAULT_PRODUCTS = [
   { id: 'p12', name: 'Nutella Spread 350g', category: 'Food', price: 40, discount: 0, emoji: '🍫', color: '#78716c', inStock: true },
 ]
 
+export const CATEGORIES = ['All', 'Fashion', 'Beauty', 'Electronics', 'Home', 'Food']
+
 export const ORDER_STATUSES = [
   { id: 'pending', label: 'Pending', color: 'bg-amber-100 text-amber-700' },
   { id: 'confirmed', label: 'Confirmed', color: 'bg-sky-100 text-sky-700' },

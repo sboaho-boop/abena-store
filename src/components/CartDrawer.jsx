@@ -71,7 +71,7 @@ export default function CartDrawer({ open, onClose, onCheckout }) {
             </div>
             <button
               onClick={onCheckout}
-              className="w-full py-3 rounded-xl bg-rose-600 text-white font-bold hover:bg-rose-700 transition"
+              className="w-full py-3 rounded-xl bg-brand text-white font-bold hover:bg-brand-dark transition"
             >
               Proceed to Checkout →
             </button>

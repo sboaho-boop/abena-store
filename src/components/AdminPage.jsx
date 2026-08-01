@@ -49,7 +49,7 @@ export default function AdminPage() {
   }
 
   const input =
-    'w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-rose-500 text-sm'
+    'w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand text-sm'
   const label = 'block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1'
 
   return (
@@ -130,7 +130,7 @@ export default function AdminPage() {
             </label>
 
             <div className="flex gap-2">
-              <button type="submit" className="flex-1 py-2.5 rounded-xl bg-rose-600 text-white font-semibold hover:bg-rose-700">
+              <button type="submit" className="flex-1 py-2.5 rounded-xl bg-brand text-white font-semibold hover:bg-brand-dark">
                 {form.id ? 'Save changes' : 'Add product'}
               </button>
               {form.id && (
